@@ -1,3 +1,7 @@
+package com.example;
+
+
+
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.io.DoubleWritable;
 import org.apache.hadoop.io.NullWritable;
@@ -7,7 +11,7 @@ import org.apache.hadoop.mapreduce.Reducer;
 import java.io.IOException;
 import java.util.*;
 
-public class KNNReducer extends Reducer<DoubleWritable, Text, Text, NullWritable>{
+public class KNNReducer extends Reducer<DoubleWritable, Text, Text, NullWritable> {
     private static int k;
 
     // global variable to hold neighbours count

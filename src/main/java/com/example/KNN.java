@@ -1,3 +1,5 @@
+package com.example;
+
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.DoubleWritable;
@@ -12,7 +14,7 @@ public class KNN {
     public static void main(String[] args) throws Exception {
 
         if (args.length != 4) {
-            System.err.println("KNN <train_dir> <output_dir> <k> <input_pattern");
+            System.err.println("com.example.KNN <train_dir> <output_dir> <k> <input_pattern");
             System.exit(2);
         }
 
@@ -24,7 +26,7 @@ public class KNN {
         // set pattern to classify
         conf.set("INPUT_PATTERN_CONF",args[3]);
 
-        Job job = Job.getInstance(conf, "KNN");
+        Job job = Job.getInstance(conf, "com.example.KNN");
         job.setJarByClass(KNN.class);
 
         job.setMapOutputKeyClass(DoubleWritable.class);
