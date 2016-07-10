@@ -29,9 +29,27 @@ public class KNNMapper                    // Mapper class
         // retrieve input type
         inputPattern = conf.getStrings("INPUT_PATTERN_CONF");
 
-        // parse input pattern to correct types
-        parsedInputPattern = new Object[]{Integer.parseInt(inputPattern[0]), Integer.parseInt(inputPattern[1]),
-               inputPattern[2], inputPattern[3], Integer.parseInt(inputPattern[4])};
+        // parse input pattern to correct types CarOwners.csv
+//        parsedInputPattern = new Object[]{Integer.parseInt(inputPattern[0]), Integer.parseInt(inputPattern[1]),
+//               inputPattern[2], inputPattern[3], Integer.parseInt(inputPattern[4])};
+        parsedInputPattern = new Object[]{
+                Integer.parseInt(inputPattern[0]),
+                Integer.parseInt(inputPattern[1]),
+                Integer.parseInt(inputPattern[2]),
+                Integer.parseInt(inputPattern[3]),
+                Integer.parseInt(inputPattern[4]),
+                Integer.parseInt(inputPattern[5]),
+                Integer.parseInt(inputPattern[6]),
+                Integer.parseInt(inputPattern[7]),
+                Integer.parseInt(inputPattern[8]),
+                Integer.parseInt(inputPattern[9]),
+                Integer.parseInt(inputPattern[10]),
+                Integer.parseInt(inputPattern[11]),
+                Integer.parseInt(inputPattern[12]),
+                Integer.parseInt(inputPattern[13]),
+                Integer.parseInt(inputPattern[14]),
+                Integer.parseInt(inputPattern[15])};
+
     }
 
     public void map(Object key, Text value, Context context) throws IOException, InterruptedException {
@@ -40,15 +58,36 @@ public class KNNMapper                    // Mapper class
         String[] row = value.toString().split(",");
 
         // to be able to store objects of varying types
-        Object[] parsedRow = {Integer.parseInt(row[0]), Integer.parseInt(row[1]), row[2], row[3], Integer.parseInt
-                (row[4]), row[5]};
-        label.set(row[5]);
+        // CarOwners.csv
+//        Object[] parsedRow = {Integer.parseInt(row[0]), Integer.parseInt(row[1]), row[2], row[3], Integer.parseInt
+//                (row[4]), row[5]};
+//        label.set(row[5]);
+        Object[] parsedRow = new Object[]{
+                Integer.parseInt(row[1]),
+                Integer.parseInt(row[2]),
+                Integer.parseInt(row[3]),
+                Integer.parseInt(row[4]),
+                Integer.parseInt(row[5]),
+                Integer.parseInt(row[6]),
+                Integer.parseInt(row[7]),
+                Integer.parseInt(row[8]),
+                Integer.parseInt(row[9]),
+                Integer.parseInt(row[10]),
+                Integer.parseInt(row[11]),
+                Integer.parseInt(row[12]),
+                Integer.parseInt(row[13]),
+                Integer.parseInt(row[14]),
+                Integer.parseInt(row[15]),
+                Integer.parseInt(row[16])};
+        label.set(row[0]);
 
         // compute euclidean distance
         distance.set(getDistance(parsedInputPattern, parsedRow));
 
         context.write(distance, label);
     }
+
+
     /**
      *
      * @param p1 pattern to classify
