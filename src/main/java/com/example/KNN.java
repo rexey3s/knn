@@ -7,13 +7,14 @@ import org.apache.hadoop.io.IntWritable;
 import org.apache.hadoop.io.NullWritable;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Job;
+import org.apache.hadoop.mapreduce.JobContext;
 import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 
 public class KNN {
     public static void main(String[] args) throws Exception {
 
-        if (args.length != 5) {
+        if (args.length < 5) {
             System.err.println("com.example.KNN <train_dir> <output_dir> <num_of_reducer> <k> <input_pattern> ");
             System.exit(2);
         }
@@ -25,7 +26,9 @@ public class KNN {
 
         // set pattern to classify
         conf.set("INPUT_PATTERN_CONF",args[4]);
-        // mode
+
+
+
 
         Job job = Job.getInstance(conf, "com.example.KNN");
         job.setJarByClass(KNN.class);
@@ -43,6 +46,8 @@ public class KNN {
         job.setNumReduceTasks(Integer.parseInt(args[2]));
         // specify input and output dirs
         FileInputFormat.addInputPath(job, new Path(args[0]));
+
+        FileInputFormat.setMinInputSplitSize(job, 1L);
         FileOutputFormat.setOutputPath(job, new Path(args[1]));
 
         job.waitForCompletion(true);
