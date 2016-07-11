@@ -4,6 +4,7 @@ import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.io.DoubleWritable;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Mapper;
+import org.apache.htrace.fasterxml.jackson.databind.deser.DataFormatReaders;
 
 import java.io.IOException;
 
@@ -28,27 +29,13 @@ public class KNNMapper                    // Mapper class
 
         // retrieve input type
         inputPattern = conf.getStrings("INPUT_PATTERN_CONF");
-
         // parse input pattern to correct types CarOwners.csv
 //        parsedInputPattern = new Object[]{Integer.parseInt(inputPattern[0]), Integer.parseInt(inputPattern[1]),
 //               inputPattern[2], inputPattern[3], Integer.parseInt(inputPattern[4])};
-        parsedInputPattern = new Object[]{
-                Integer.parseInt(inputPattern[0]),
-                Integer.parseInt(inputPattern[1]),
-                Integer.parseInt(inputPattern[2]),
-                Integer.parseInt(inputPattern[3]),
-                Integer.parseInt(inputPattern[4]),
-                Integer.parseInt(inputPattern[5]),
-                Integer.parseInt(inputPattern[6]),
-                Integer.parseInt(inputPattern[7]),
-                Integer.parseInt(inputPattern[8]),
-                Integer.parseInt(inputPattern[9]),
-                Integer.parseInt(inputPattern[10]),
-                Integer.parseInt(inputPattern[11]),
-                Integer.parseInt(inputPattern[12]),
-                Integer.parseInt(inputPattern[13]),
-                Integer.parseInt(inputPattern[14]),
-                Integer.parseInt(inputPattern[15])};
+
+        for(int i=0;i<inputPattern.length;i++) {
+            parsedInputPattern[i] = Double.parseDouble(inputPattern[i]);
+        }
 
     }
 
@@ -62,27 +49,14 @@ public class KNNMapper                    // Mapper class
 //        Object[] parsedRow = {Integer.parseInt(row[0]), Integer.parseInt(row[1]), row[2], row[3], Integer.parseInt
 //                (row[4]), row[5]};
 //        label.set(row[5]);
-        Object[] parsedRow = new Object[]{
-                Integer.parseInt(row[1]),
-                Integer.parseInt(row[2]),
-                Integer.parseInt(row[3]),
-                Integer.parseInt(row[4]),
-                Integer.parseInt(row[5]),
-                Integer.parseInt(row[6]),
-                Integer.parseInt(row[7]),
-                Integer.parseInt(row[8]),
-                Integer.parseInt(row[9]),
-                Integer.parseInt(row[10]),
-                Integer.parseInt(row[11]),
-                Integer.parseInt(row[12]),
-                Integer.parseInt(row[13]),
-                Integer.parseInt(row[14]),
-                Integer.parseInt(row[15]),
-                Integer.parseInt(row[16])};
+        Object[] parsedRow = new Object[] {};
+        for(int i=1;i<row.length;i++) {
+            parsedRow[i] = Double.parseDouble(row[i]);
+        }
         label.set(row[0]);
 
         // compute euclidean distance
-        distance.set(getDistance(parsedInputPattern, parsedRow));
+        distance.set(getDoubleDistance(parsedInputPattern, parsedRow));
 
         context.write(distance, label);
     }
@@ -101,13 +75,29 @@ public class KNNMapper                    // Mapper class
             double difference = 0.0;
             if (p1[i] instanceof Integer) {  // only subtract if both features are int
                 difference = (Integer) p1[i] - (Integer) p2[i];  // cast them back to type Integer
-            } else if (p1[i] instanceof String) {
+            }
+            else if(p1[i] instanceof Double) {
+                difference = (Double) p1[i] - (Double) p2[i];  // cast them back to type Integer
+
+            }
+            else if (p1[i] instanceof String) {
                 if (p1[i].equals(p2[i])) {   // distance is 0 if they are same
                     difference = 0;
                 } else {
                     difference = 1;  // distance is 1 if they different
                 }
             }
+            dist += difference * difference;
+        }
+        return Math.sqrt(dist);
+    }
+
+    private static double getDoubleDistance(Object[] p1, Object[] p2) {
+        double dist = 0.0;
+
+        for (int i = 0; i < p1.length; i++) {
+            double difference = (Double) p1[i] - (Double) p2[i];
+
             dist += difference * difference;
         }
         return Math.sqrt(dist);

@@ -21,6 +21,7 @@ public class KNNReducer extends Reducer<DoubleWritable, Text, Text, NullWritable
     // the output classification
     private Text word = new Text();
 
+    private Text valueText = new Text();
     // global variable to hold the neighbours
     private List<String> labelCounts = new ArrayList<String>();
 
@@ -58,6 +59,8 @@ public class KNNReducer extends Reducer<DoubleWritable, Text, Text, NullWritable
                 String maxLabel = getMax(labelCounts);
                 word.set(maxLabel);
                 context.write(word, null);
+                valueText.set(labelCounts.toString());
+                context.write(valueText, null);
             }
         }
     }
