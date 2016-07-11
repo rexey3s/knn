@@ -7,13 +7,15 @@ import org.apache.hadoop.io.DoubleWritable;
 import org.apache.hadoop.io.NullWritable;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Reducer;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.util.*;
 
 public class KNNReducer extends Reducer<DoubleWritable, Text, Text, NullWritable> {
     private static int k;
-
+    private Logger logger = LoggerFactory.getLogger(KNNReducer.class);
     // global variable to hold neighbours count
     private int count = 0;
 
@@ -47,9 +49,10 @@ public class KNNReducer extends Reducer<DoubleWritable, Text, Text, NullWritable
         while(count < k && valuesList.hasNext()){
 
             // add label to a list so we can find most frequent
-            labelCounts.add(valuesList.next().toString());
+            String v = valuesList.next().toString();
+            labelCounts.add(v);
             count++;
-
+            logger.info("Count: {} and Value = {}", v);
             // we have as many as k
             if( count == k ){
                 // get the most frequent... we're done!
