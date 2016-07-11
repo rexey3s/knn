@@ -32,7 +32,7 @@ public class KNNMapper                    // Mapper class
         // parse input pattern to correct types CarOwners.csv
 //        parsedInputPattern = new Object[]{Integer.parseInt(inputPattern[0]), Integer.parseInt(inputPattern[1]),
 //               inputPattern[2], inputPattern[3], Integer.parseInt(inputPattern[4])};
-
+        parsedInputPattern = new Object[inputPattern.length];
         for(int i=0;i<inputPattern.length;i++) {
             parsedInputPattern[i] = Double.parseDouble(inputPattern[i]);
         }
@@ -49,7 +49,7 @@ public class KNNMapper                    // Mapper class
 //        Object[] parsedRow = {Integer.parseInt(row[0]), Integer.parseInt(row[1]), row[2], row[3], Integer.parseInt
 //                (row[4]), row[5]};
 //        label.set(row[5]);
-        Object[] parsedRow = new Object[] {};
+        Object[] parsedRow = new Object[row.length - 1];
         for(int i=1;i<row.length;i++) {
             parsedRow[i] = Double.parseDouble(row[i]);
         }
