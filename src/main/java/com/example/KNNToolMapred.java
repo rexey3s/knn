@@ -22,18 +22,18 @@ public class KNNToolMapred extends Configured implements Tool {
 
     @Override
     public int run(String[] args) throws Exception {
-        if (args.length < 5) {
-            System.err.println("com.example.KNNToolMapred <train_dir> <output_dir> <num_of_reducer> <k> <input_pattern> ");
+        if (args.length != 6) {
+            System.err.println("com.example.KNNToolMapred <train_dir> <output_dir> <split_size> <num_of_reducer> <k> <input_pattern> ");
             System.exit(2);
         }
 
         Configuration conf = new Configuration();
 
         // set k
-        conf.set("K_CONF",args[3]);
+        conf.set("K_CONF",args[4]);
 
         // set pattern to classify
-        conf.set("INPUT_PATTERN_CONF",args[4]);
+        conf.set("INPUT_PATTERN_CONF",args[5]);
 
 
 
@@ -51,11 +51,12 @@ public class KNNToolMapred extends Configured implements Tool {
         job.setReducerClass(KNNReducer.class);
 
         // set no of reducer task
-        job.setNumReduceTasks(Integer.parseInt(args[2]));
+        job.setNumReduceTasks(Integer.parseInt(args[3]));
         // specify input and output dirs
         FileInputFormat.addInputPath(job, new Path(args[0]));
-        FileInputFormat.setMaxInputSplitSize(job, 1000L);
         FileOutputFormat.setOutputPath(job, new Path(args[1]));
+
+        FileInputFormat.setMaxInputSplitSize(job, Long.parseLong(args[2]));
 
         return job.waitForCompletion(true) ? 0 : 1;
     }
