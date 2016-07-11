@@ -14,7 +14,6 @@ import java.util.*;
 
 public class KNNReducer extends Reducer<DoubleWritable, Text, Text, NullWritable> {
     private static int k;
-    private static final Log LOG = LogFactory.getLog(KNNReducer.class);
     // global variable to hold neighbours count
     private int count = 0;
 
@@ -44,7 +43,6 @@ public class KNNReducer extends Reducer<DoubleWritable, Text, Text, NullWritable
     public void reduce(DoubleWritable key, Iterable<Text> values, Context context)
             throws IOException, InterruptedException {
         Iterator<Text> valuesList = values.iterator();
-        LOG.info("Distance: "+key.toString()+" values labels: "+values.toString());
         // retrieve the label
         while(count < k && valuesList.hasNext()){
 
@@ -52,7 +50,7 @@ public class KNNReducer extends Reducer<DoubleWritable, Text, Text, NullWritable
             String v = valuesList.next().toString();
             labelCounts.add(v);
             count++;
-            LOG.info("Count: "+k+" and Value = "+v);
+//            LOG.info("Count: "+k+" and Value = "+v);
             // we have as many as k
             if( count == k ){
                 // get the most frequent... we're done!
