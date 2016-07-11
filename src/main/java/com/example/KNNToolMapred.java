@@ -1,21 +1,29 @@
 package com.example;
 
 import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.conf.Configured;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.DoubleWritable;
-import org.apache.hadoop.io.IntWritable;
 import org.apache.hadoop.io.NullWritable;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Job;
-import org.apache.hadoop.mapreduce.JobContext;
 import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
+import org.apache.hadoop.util.Tool;
+import org.apache.hadoop.util.ToolRunner;
 
-public class KNN {
+public class KNNToolMapred extends Configured implements Tool {
     public static void main(String[] args) throws Exception {
+        int res = ToolRunner.run(new Configuration(), new KNNToolMapred(), args);
+        System.exit(res);
 
+
+    }
+
+    @Override
+    public int run(String[] args) throws Exception {
         if (args.length < 5) {
-            System.err.println("com.example.KNN <train_dir> <output_dir> <num_of_reducer> <k> <input_pattern> ");
+            System.err.println("com.example.KNNToolMapred <train_dir> <output_dir> <num_of_reducer> <k> <input_pattern> ");
             System.exit(2);
         }
 
@@ -30,8 +38,8 @@ public class KNN {
 
 
 
-        Job job = Job.getInstance(conf, "com.example.KNN");
-        job.setJarByClass(KNN.class);
+        Job job = Job.getInstance(conf, "com.example.KNNToolMapred");
+        job.setJarByClass(KNNToolMapred.class);
 
         job.setMapOutputKeyClass(DoubleWritable.class);
         job.setMapOutputValueClass(Text.class);
@@ -50,7 +58,8 @@ public class KNN {
         FileInputFormat.setMinInputSplitSize(job, 1L);
         FileOutputFormat.setOutputPath(job, new Path(args[1]));
 
-        job.waitForCompletion(true);
-
+        return job.waitForCompletion(true) ? 0 : 1;
     }
+
+
 }

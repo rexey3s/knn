@@ -47,7 +47,7 @@
                 <configuration>
                     <archive>
                         <manifest>
-                            <mainClass>com.example.KNN</mainClass>
+                            <mainClass>com.example.KNNToolMapred</mainClass>
                         </manifest>
                     </archive>
                     <descriptorRefs>
