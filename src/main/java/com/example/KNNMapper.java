@@ -16,7 +16,7 @@ public class KNNMapper                    // Mapper class
     private String[] inputPattern;
 
     // array of type Object with parsed input set
-    private Object[] parsedInputPattern;
+    private Double[] parsedInputPattern;
 
     // to hold label
     private static Text label = new Text();
@@ -33,7 +33,7 @@ public class KNNMapper                    // Mapper class
         // parse input pattern to correct types CarOwners.csv
 //        parsedInputPattern = new Object[]{Integer.parseInt(inputPattern[0]), Integer.parseInt(inputPattern[1]),
 //               inputPattern[2], inputPattern[3], Integer.parseInt(inputPattern[4])};
-        parsedInputPattern = new Object[inputPattern.length];
+        parsedInputPattern = new Double[inputPattern.length];
         for(int i=0;i<inputPattern.length;i++) {
             parsedInputPattern[i] = Double.parseDouble(inputPattern[i]);
         }
@@ -50,7 +50,7 @@ public class KNNMapper                    // Mapper class
 //        Object[] parsedRow = {Integer.parseInt(row[0]), Integer.parseInt(row[1]), row[2], row[3], Integer.parseInt
 //                (row[4]), row[5]};
 //        label.set(row[5]);
-        Object[] parsedRow = new Object[row.length - 1];
+        Double[] parsedRow = new Double[row.length - 1];
         for(int i=0;i<parsedRow.length;i++) {
             parsedRow[i] =Objects.equals(row[i + 1], "?") ? 0: Double.parseDouble(row[i+1]);
         }
@@ -93,11 +93,11 @@ public class KNNMapper                    // Mapper class
         return Math.sqrt(dist);
     }
 
-    private static double getDoubleDistance(Object[] p1, Object[] p2) {
+    private static double getDoubleDistance(Double[] p1, Double[] p2) {
         double dist = 0.0;
 
         for (int i = 0; i < p1.length; i++) {
-            double difference = (Double) p1[i] - (Double) p2[i];
+            double difference = p1[i] - p2[i];
 
             dist += difference * difference;
         }

@@ -44,7 +44,7 @@ public class KNNReducer extends Reducer<DoubleWritable, Text, Text, NullWritable
     public void reduce(DoubleWritable key, Iterable<Text> values, Context context)
             throws IOException, InterruptedException {
         Iterator<Text> valuesList = values.iterator();
-
+        LOG.info("Distance: "+key.toString()+" values labels: "+values.toString());
         // retrieve the label
         while(count < k && valuesList.hasNext()){
 
