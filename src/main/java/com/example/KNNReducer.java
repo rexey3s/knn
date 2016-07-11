@@ -58,9 +58,9 @@ public class KNNReducer extends Reducer<DoubleWritable, Text, Text, NullWritable
                 // get the most frequent... we're done!
 //                String maxLabel = getMax(labelCounts);
 //                word.set(maxLabel);
-                context.write(word, null);
-                valueText.set(labelCounts.toString());
-                context.write(valueText, null);
+//                context.write(word, null);
+//                valueText.set(labelCounts.toString());
+//                context.write(valueText, null);
             }
         }
     }
