@@ -54,8 +54,7 @@ public class KNNToolMapred extends Configured implements Tool {
         job.setNumReduceTasks(Integer.parseInt(args[2]));
         // specify input and output dirs
         FileInputFormat.addInputPath(job, new Path(args[0]));
-
-        FileInputFormat.setMinInputSplitSize(job, 1L);
+        FileInputFormat.setMaxInputSplitSize(job, 1000L);
         FileOutputFormat.setOutputPath(job, new Path(args[1]));
 
         return job.waitForCompletion(true) ? 0 : 1;
