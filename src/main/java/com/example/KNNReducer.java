@@ -1,21 +1,20 @@
 package com.example;
 
 
-
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.io.DoubleWritable;
 import org.apache.hadoop.io.NullWritable;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Reducer;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.util.*;
 
 public class KNNReducer extends Reducer<DoubleWritable, Text, Text, NullWritable> {
     private static int k;
-    private Logger logger = LoggerFactory.getLogger(KNNReducer.class);
+    private static final Log LOG = LogFactory.getLog(KNNReducer.class);
     // global variable to hold neighbours count
     private int count = 0;
 
@@ -52,7 +51,7 @@ public class KNNReducer extends Reducer<DoubleWritable, Text, Text, NullWritable
             String v = valuesList.next().toString();
             labelCounts.add(v);
             count++;
-            logger.info("Count: {} and Value = {}", v);
+            LOG.info("Count: "+k+" and Value = "+v);
             // we have as many as k
             if( count == k ){
                 // get the most frequent... we're done!
