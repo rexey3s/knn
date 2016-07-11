@@ -7,6 +7,7 @@ import org.apache.hadoop.mapreduce.Mapper;
 import org.apache.htrace.fasterxml.jackson.databind.deser.DataFormatReaders;
 
 import java.io.IOException;
+import java.util.Objects;
 
 public class KNNMapper                    // Mapper class
         extends Mapper<Object, Text, DoubleWritable, Text> {
@@ -51,7 +52,7 @@ public class KNNMapper                    // Mapper class
 //        label.set(row[5]);
         Object[] parsedRow = new Object[row.length - 1];
         for(int i=0;i<parsedRow.length;i++) {
-            parsedRow[i] = Double.parseDouble(row[i+1]);
+            parsedRow[i] =Objects.equals(row[i + 1], "?") ? 0: Double.parseDouble(row[i+1]);
         }
         label.set(row[0]);
 
