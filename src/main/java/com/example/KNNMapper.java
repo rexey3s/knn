@@ -50,8 +50,8 @@ public class KNNMapper                    // Mapper class
 //                (row[4]), row[5]};
 //        label.set(row[5]);
         Object[] parsedRow = new Object[row.length - 1];
-        for(int i=1;i<row.length;i++) {
-            parsedRow[i] = Double.parseDouble(row[i]);
+        for(int i=0;i<row.length;i++) {
+            parsedRow[i] = Double.parseDouble(row[i+1]);
         }
         label.set(row[0]);
 
