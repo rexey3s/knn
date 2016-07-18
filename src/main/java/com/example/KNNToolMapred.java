@@ -22,7 +22,7 @@ public class KNNToolMapred extends Configured implements Tool {
 
     @Override
     public int run(String[] args) throws Exception {
-        if (args.length != 5) {
+        if (args.length < 5) {
             System.err.println("com.example.KNNToolMapred <train_dir> <output_dir> <num_of_reducer> <k> <input_pattern> ");
             System.exit(2);
         }
