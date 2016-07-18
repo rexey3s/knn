@@ -8,13 +8,22 @@ import org.apache.hadoop.io.NullWritable;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Job;
 import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
+import org.apache.hadoop.mapreduce.lib.input.TextInputFormat;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
+import org.apache.hadoop.mapreduce.lib.output.TextOutputFormat;
 import org.apache.hadoop.util.Tool;
 import org.apache.hadoop.util.ToolRunner;
 
 public class KNNToolMapred extends Configured implements Tool {
     public static void main(String[] args) throws Exception {
-        int res = ToolRunner.run(new Configuration(), new KNNToolMapred(), args);
+        Configuration conf = new Configuration();
+        // set k
+        conf.set("K_CONF",args[3]);
+
+        // set pattern to classify
+        conf.set("INPUT_PATTERN_CONF",args[4]);
+        conf.set("yarn.nodemanager.vmem-check-enabled", "false");
+        int res = ToolRunner.run(conf, new KNNToolMapred(), args);
         System.exit(res);
 
 
@@ -27,18 +36,13 @@ public class KNNToolMapred extends Configured implements Tool {
             System.exit(2);
         }
 
-        Configuration conf = new Configuration();
-
-        // set k
-        conf.set("K_CONF",args[3]);
-
-        // set pattern to classify
-        conf.set("INPUT_PATTERN_CONF",args[4]);
 
 
 
 
-        Job job = Job.getInstance(conf, "com.example.KNNToolMapred");
+
+
+        Job job = Job.getInstance(this.getConf(), "com.example.KNNToolMapred");
         job.setJarByClass(KNNToolMapred.class);
 
         job.setMapOutputKeyClass(DoubleWritable.class);
@@ -53,8 +57,13 @@ public class KNNToolMapred extends Configured implements Tool {
         // set no of reducer task
         job.setNumReduceTasks(Integer.parseInt(args[2]));
         // specify input and output dirs
+        // Input
         FileInputFormat.addInputPath(job, new Path(args[0]));
+        job.setInputFormatClass(TextInputFormat.class);
+
+        // Output
         FileOutputFormat.setOutputPath(job, new Path(args[1]));
+        job.setOutputFormatClass(TextOutputFormat.class);
 
 
         return job.waitForCompletion(true) ? 0 : 1;
